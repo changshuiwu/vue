@@ -29,6 +29,7 @@ export type UnwrapNestedRefs<T> = T extends Ref ? T : UnwrapRefSimple<T>
 
 export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
 export function reactive(target: object) {
+  // 添加响应
   makeReactive(target, false)
   return target
 }
@@ -49,7 +50,11 @@ export function shallowReactive<T extends object>(
   def(target, ReactiveFlags.IS_SHALLOW, true)
   return target
 }
-
+/**
+ * 
+ * @param target  添加响应式的目标对象
+ * @param shallow  深浅 响应
+ */
 function makeReactive(target: any, shallow: boolean) {
   // if trying to observe a readonly proxy, return the readonly version.
   if (!isReadonly(target)) {
@@ -74,6 +79,7 @@ function makeReactive(target: any, shallow: boolean) {
         )
       }
     }
+    
     const ob = observe(
       target,
       shallow,
